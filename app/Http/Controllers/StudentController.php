@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -19,9 +18,24 @@ class StudentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create($id)
+    public function create(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'cgpa' => 'required',
+        ]);
+        $student = Student::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'cgpa' => $request->cgpa,
+        ]);
+
+        return response([
+            'message' => 'Student created successfully.',
+            'student' => $student,
+            'status' => true
+        ],201);
     }
 
     /**
